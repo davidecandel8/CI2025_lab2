@@ -18,12 +18,12 @@ The `POPULATION_SIZE` is fixed at 100 individuals, composed as follows:
     * **1 Ordered Tour:** A simple tour `[0, 1, 2, ...N]`.
     * **1 Reversed Tour:** A tour `[...N, 2, 1, 0]`.
 
-* **Greedy Seeds (Dynamic %):**
-    * Approximately 50% of the population (`GREEDY_SEED_PERCENT`) is built using the **Nearest Neighbor (Greedy)** heuristic.
+* **Greedy (Dynamic %):**
+    * Approximately 50% of the population is built using the **Nearest Neighbor (Greedy)** heuristic.
     * To ensure variety, each of these individuals starts from a different, randomly selected city.
     * This number is dynamic; for a 10-city problem, it will create fewer greedy-randoms than for a 100-city problem.
 
-* **Random Seeds (Dynamic %):**
+* **Random (Dynamic %):**
     * The remaining slots in the population (approx. 50%) are filled with completely random permutations to ensure high genetic diversity and allow for broad exploration.
 
 ---
