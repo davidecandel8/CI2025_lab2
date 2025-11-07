@@ -59,23 +59,25 @@ Two specialized, permutation-safe operators are used to create offspring.
 
 ---
 
-## **4. The Hybrid Core: Probabilistic Hill Climber (HC)**
-
-### **The Hill Climber (FI-HC)**
-The Hill Climber used is a custom **"First Improvement" (FI)** strategy. It is "slightly different" from a full "Best Improvement" HC:
+## **4. The Hill Climber**
+The Hill Climber used is a custom strategy. 
 1.  It loops through each city (`i`) in the tour.
-2.  For that city, it scans all other possible insertion points (`j`) to find the *best* new position for *that city*.
-3.  If a move is found that improves the total cost (`best_delta < 0`), the move is executed, and the HC **breaks** to restart its `while` loop, searching for the *next* improvement on the newly modified tour.
+2.  For that city, it scans all other possible insertion points (`j`) to find the best new position for that city.
+3.  If a move is found that improves the total cost (`best_delta < 0`), the move is executed, and the HC breaks to restart its `while` loop, searching for the next improvement on the newly modified tour.
 
-This FI approach is much faster than a "true" **Best Improvement (BI)** Hill Climber, which would need to scan *all $N \times N$ possible moves* before executing only the single best one.
+**A simple example:**
+* Imagine the current tour is `[A, B, C, D]` with a total cost of 50.
+* The algorithm picks **City B** to check.
+* It tries moving `B` to all other spots:
+    * Try `[A, C, B, D]` (Cost: 45)
+    * Try `[A, C, D, B]` (Cost: 52)
+* It finds that `[A, C, B, D]` is the best move for `B` and its cost (45) is better than the original (50).
+* The algorithm immediately executes this move. It *breaks* its search and restarts the entire `while` loop with the new, better tour `[A, C, B, D]`.
 
-### **Why a "True" HC on Every Child is Too Costly**
-While a full BI-HC on every child would find better local optima, it is **computationally infeasible**.
-* A BI-HC has a complexity of at least $O(K \cdot N^2)$, where $K$ is the number of improvement steps.
-* Running this $O(K \cdot N^2)$ operation on all 40 offspring at every generation would make the algorithm *extremely* slow, especially for problems with $N=1000$ cities.
+This approach is faster than a "true" Hill Climber, which would need to scan *all $N \times N$ possible moves* before executing only the single best one.
 
 ### **The Solution: Dynamic Application Probability**
-To balance performance and quality, the fast FI-HC is applied **probabilistically**. The probability of an offspring being optimized is **dynamic and based on the problem size**:
+To balance performance and quality, the fast HC is applied probabilistically. The probability of an offspring being optimized is dynamic and based on the problem size:
 
 `hc_probability = min(1.0, 100 / N)`
 
